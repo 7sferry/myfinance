@@ -2,8 +2,8 @@ import {rp} from "./Helper";
 
 const nettSalary = 15_000_000;
 const totalBalance = 316_934_690;
-const totalRdn = 35_116_531;
-const stockInvestedValueInYear = 66_204_789;
+const totalRdn = 38_516_332;
+const stockInvestedValueInYear = 69_604_590;
 
 const investValue = countInvestValue();
 const mutualFund = investValue / 3;
@@ -32,3 +32,4 @@ function execute() {
     console.log("sisa dana yang harus diinvestasikan = " + rp(shouldInvest));
 }
 
+execute();
