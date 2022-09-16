@@ -1,40 +1,44 @@
+import {LocalDate} from "./Helper";
+
 export type StockData = {
-    stockName: string;
-    currentPrice: number;
-    totalLot: number;
+    readonly stockName: string;
+    readonly currentUnitPrice: number;
+    readonly totalLot: number;
+    readonly monthlyInvestTarget: number;
+    readonly since: LocalDate;
 }
 
-export class StockCalculator {
-    readonly stockData: StockData;
+export class VcaCalculator {
     readonly stockName: string;
-    readonly currentPrice: number;
-    readonly totalLot: number;
+    readonly sinceDate: Date;
+    currentLotPrice: number;
+    totalLot: number;
+    monthlyInvestTarget: number;
 
     constructor(stockData: StockData) {
-        this.stockData = stockData;
         this.stockName = stockData.stockName;
-        this.currentPrice = stockData.currentPrice;
+        this.currentLotPrice = stockData.currentUnitPrice * 100;
         this.totalLot = stockData.totalLot;
+        this.monthlyInvestTarget = stockData.monthlyInvestTarget;
+        this.sinceDate = new Date(`${stockData.since.year}-${stockData.since.monthly}-${stockData.since.date ?? 1}`);
     }
 
     buyLot(lot: number): number {
-        this.stockData.totalLot += lot;
-        // console.log("you bought " + lot + " lots for " + rp(lot * this.currentPrice));
-        return this.stockData.totalLot;
+        this.totalLot += lot;
+        return this.totalLot;
     }
 
-    updatePrice(newPriceInLot: number) {
-        this.stockData.currentPrice = newPriceInLot;
-        // console.log("new price = " + rp(newPriceInLot));
-        return this.stockData.currentPrice;
+    updateUnitPrice(newUnitPrice: number) {
+        this.currentLotPrice = newUnitPrice * 100;
+        return this.currentLotPrice;
     }
 
     totalPrice(): number {
-        return this.stockData.currentPrice * 100 * this.stockData.totalLot;
+        return this.currentLotPrice * this.totalLot;
     }
 
-    countLotShouldInvest(budget: number, monthVal: number): number {
-        return Math.round(((budget * monthVal) - this.totalPrice()) / (this.stockData.currentPrice * 100));
+    countLotShouldInvest(budget: number, monthTotal: number): number {
+        return Math.round(((budget * monthTotal) - this.totalPrice()) / this.currentLotPrice);
     }
 
 }
