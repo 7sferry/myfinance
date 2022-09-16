@@ -1,45 +1,22 @@
 import {rp} from "./Helper";
+import {StockCalculator, StockData} from "./VcaFormula";
 
-class StockData {
-    stockName: string;
-    currentPrice: number;
-    totalLot: number;
-
-    constructor(stockName: string, currentPrice: number, totalLot: number) {
-        this.stockName = stockName;
-        this.currentPrice = currentPrice;
-        this.totalLot = totalLot;
-        // console.log("initial price = " + rp(currentPrice));
-    }
-
-    buyLot(lot: number): number {
-        this.totalLot += lot;
-        // console.log("you bought " + lot + " lots for " + rp(lot * this.currentPrice));
-        return this.totalLot;
-    }
-
-    updatePrice(newPriceInLot: number) {
-        this.currentPrice = newPriceInLot;
-        // console.log("new price = " + rp(newPriceInLot));
-        return this.currentPrice;
-    }
-
-    totalPrice(): number {
-        return this.currentPrice * this.totalLot;
-    }
-
-    countLotShouldInvest(budget: number, monthVal: number): number {
-        return Math.round(((budget * monthVal) - this.totalPrice()) / this.currentPrice);
-    }
-
-}
+/************************
+ * Author: [MR FERRY™]  *
+ * September 2022       *
+ ************************/
 
 const investTarget = 1_000_000;
-const stock: StockData = new StockData("BBCA", 90_000, 18);
-let nMonth: number = 3;
+const stockDmas: Readonly<StockData> = {
+    stockName: "DMAS",
+    currentPrice: 181,
+    totalLot: 0,
+}
+let nMonth: number = 1;
 
 function execute() {
     let lotShouldInvest: number;
+    const stock: StockCalculator = new StockCalculator(stockDmas);
 
     console.log("saya berniat untuk investasi kurang lebih " + rp(investTarget) + " perbulan");
     console.log("saya akan membeli saham " + stock?.stockName);
